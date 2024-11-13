@@ -94,5 +94,23 @@ namespace T1
             textBox2.Clear();
 
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            // get the numericUpDown1
+            int id = (int)numericUpDown1.Value;
+
+            // delete the student
+            string query = "DELETE FROM opiskelija WHERE id = @id";
+            using SqlConnection connection = new(connectionString);
+            SqlCommand command = new(query, connection);
+            command.Parameters.AddWithValue("@id", id);
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+
+            // clear the numericUpDown1 
+            numericUpDown1.Value = 0;
+        }
     }
 }

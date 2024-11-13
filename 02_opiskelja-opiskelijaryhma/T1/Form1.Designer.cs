@@ -37,7 +37,10 @@
             textBox1 = new TextBox();
             textBox2 = new TextBox();
             label3 = new Label();
+            numericUpDown1 = new NumericUpDown();
+            button3 = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
             // 
             // dataGridView1
@@ -121,11 +124,30 @@
             label3.TabIndex = 9;
             label3.Text = "Ryhmä:";
             // 
+            // numericUpDown1
+            // 
+            numericUpDown1.Location = new Point(364, 411);
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.Size = new Size(142, 27);
+            numericUpDown1.TabIndex = 10;
+            // 
+            // button3
+            // 
+            button3.Location = new Point(524, 409);
+            button3.Name = "button3";
+            button3.Size = new Size(177, 29);
+            button3.TabIndex = 11;
+            button3.Text = "Poista oppilas ID:llä";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button3);
+            Controls.Add(numericUpDown1);
             Controls.Add(label3);
             Controls.Add(textBox2);
             Controls.Add(textBox1);
@@ -138,6 +160,7 @@
             Name = "Form1";
             Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -152,5 +175,7 @@
         private TextBox textBox1;
         private TextBox textBox2;
         private Label label3;
+        private NumericUpDown numericUpDown1;
+        private Button button3;
     }
 }
