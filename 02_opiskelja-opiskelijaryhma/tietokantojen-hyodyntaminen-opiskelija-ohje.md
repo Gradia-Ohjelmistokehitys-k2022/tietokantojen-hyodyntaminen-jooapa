@@ -7,6 +7,21 @@ Tehtävässä tehdään lomake -sovellus, jolla saa lisättyä nimen tietokannas
 + Visual Studio - new project - Windows forms app - Projektin ja tietokannan nimeksi 'T1' tai 'Opiskelijat'
 + Luodaan tietokanta ja siihen taulut nimeltä opiskelija ja opiskelijaryhma
 + Tauluihin luodaan tarvittavat kentät (opiskelijaan mm. id, nimi ja ryhmään id, tunnus)
+```sql
+CREATE TABLE opiskelija
+(
+    id INT PRIMARY KEY IDENTITY,
+    etunimi NVARCHAR(50),
+    sukunimi NVARCHAR(50),
+    ryhma_id INT
+)
+
+CREATE TABLE opiskelijaryhma
+(
+    id INT PRIMARY KEY IDENTITY,
+    ryhmannimi NVARCHAR(50)
+)
+```
 + WindowsForms-sovellus, jonka avulla lisätään, haetaan ja poistetaan tietoja tietokannasta.
 + Selvitä miten sovelluksen ja tietokannan välinen yhteys muodostetaan.
  
@@ -15,7 +30,39 @@ Tehtävässä tehdään lomake -sovellus, jolla saa lisättyä nimen tietokannas
 Alla olevan ohjeen oletus on, että opiskelijoiden ja ryhmän suhde on monen suhde yhteen. Voit halutessasi toteuttaa myös tietokantaskeeman, jossa opiskelijoiden ja ryhman suhde on monen suhden moneen. Huomaa, että tällöin tarvitse yhden välitaulun lisää.
 
 1. Luo tietokantaan opiskelija -taulu ja siihen kentät id, etunimi ja sukunimi. Lisää tietokantaan kymmenen opiskelijaa.
+```sql
+CREATE TABLE opiskelija
+(
+    id INT PRIMARY KEY IDENTITY,
+    etunimi NVARCHAR(50),
+    sukunimi NVARCHAR(50),
+    ryhma_id INT
+)
+
+INSERT INTO opiskelija (etunimi, sukunimi, ryhma_id) VALUES ('Matti', 'Meikäläinen', 1)
+INSERT INTO opiskelija (etunimi, sukunimi, ryhma_id) VALUES ('Roope', 'Ankka', 2)
+INSERT INTO opiskelija (etunimi, sukunimi, ryhma_id) VALUES ('Aku', 'Ankka', 3)
+INSERT INTO opiskelija (etunimi, sukunimi, ryhma_id) VALUES ('Hessu', 'Hopo', 3)
+INSERT INTO opiskelija (etunimi, sukunimi, ryhma_id) VALUES ('Mikki', 'Hiiri', 1)
+INSERT INTO opiskelija (etunimi, sukunimi, ryhma_id) VALUES ('Iines', 'Ankka', 1)
+INSERT INTO opiskelija (etunimi, sukunimi, ryhma_id) VALUES ('Hannu', 'Hanhi', 2)
+INSERT INTO opiskelija (etunimi, sukunimi, ryhma_id) VALUES ('Aapo', 'Kissa', 1)
+INSERT INTO opiskelija (etunimi, sukunimi, ryhma_id) VALUES ('Patrik', 'Tähti', 2)
+INSERT INTO opiskelija (etunimi, sukunimi, ryhma_id) VALUES ('Eemeli', 'Kettu', 3)
+
+```
 2. Luo tietokantaan opiskelijaryhma -taulu ja siihen kentät id ja ryhmannimi. Lisää tietokantaan ainakin kolme eri ryhmää.
+```sql
+CREATE TABLE opiskelijaryhma
+(
+    id INT PRIMARY KEY IDENTITY,
+    ryhmannimi NVARCHAR(50)
+)
+
+INSERT INTO opiskelijaryhma (ryhmannimi) VALUES ('Ryhmä 1')
+INSERT INTO opiskelijaryhma (ryhmannimi) VALUES ('Ryhmä 2')
+INSERT INTO opiskelijaryhma (ryhmannimi) VALUES ('Ryhmä 3')
+```
 
 3. Lisää lomakkeelle DatagridView-komponentti, johon tulostat kaikki opiskelijoiden nimet. 
 
