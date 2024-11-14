@@ -5,6 +5,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
+using static System.Net.Mime.MediaTypeNames;
+using System.Windows.Forms;
 
 
 
@@ -17,54 +20,77 @@ namespace Autokauppa.model
 
         public DatabaseHallinta()
         {
-           yhteysTiedot = "Leikkaa tähän oma connection string tietokannasta";
+           yhteysTiedot =
+            "Server=(localdb)\\MSSQLLocalDB;" +
+            "Database=Autokoulu;" +
+            "Trusted_Connection=True;";
         }
 
-        public bool connectDatabase()
+        public bool ConnectDatabase()
         {
-            dbYhteys.ConnectionString = yhteysTiedot;
-            
+            dbYhteys = new SqlConnection(yhteysTiedot);
             try
-            { 
+            {
                 dbYhteys.Open();
                 return true;
             }
-            catch(Exception e)
-            { 
-                Console.WriteLine("Virheilmoitukset:" + e);
-                dbYhteys.Close();
+            catch (Exception)
+            {
                 return false;
-
             }
-            
         }
 
-        public void disconnectDatabase()
+        public void DisconnectDatabase()
         {
             dbYhteys.Close();
         }
 
-        public bool saveAutoIntoDatabase(Auto newAuto)
+        public bool SaveAutoIntoDatabase(Auto newAuto)
         {
             bool palaute = false;
             return palaute;
-
-            
         }
 
-        public List<object> getAllAutoMakersFromDatabase()
+        public Auto GetAutoFromDatabase(int id)
         {
-            List<object> palaute=null;
-            return palaute;
-
+            string query = @"SELECT * FROM auto
+                            ORDER BY(SELECT NULL)
+                            OFFSET " + id + @" ROWS
+                            FETCH NEXT 1 ROWS ONLY;"
+            ;
+            SqlCommand command = new SqlCommand(query, dbYhteys);
+            SqlDataReader reader = command.ExecuteReader();
+            Auto auto = new Auto();
+            while (reader.Read())
+            {
+                auto.ID = reader.GetInt32(0);
+                auto.Hinta = reader.GetDecimal(1);
+                auto.Rekisteri_paivamaara = reader.GetDateTime(2);
+                auto.Moottorin_tilavuus = reader.GetDecimal(3);
+                auto.Mittarilukema = reader.GetInt32(4);
+                auto.AutonMerkkiID = reader.GetInt32(5);
+                auto.AutonMalliID = reader.GetInt32(6);
+                auto.VaritID = reader.GetInt32(7);
+                auto.PolttoaineID = reader.GetInt32(8);
+            }
+            return auto;
         }
 
-        public List<object> getAutoModelsByMakerId(int makerId) 
-             
+        internal List<AutonMallit> GetAutonMallit()
         {
-            List<object> palaute = null;
-            return palaute;
+            string query = @"SELECT * FROM autonmallit;";
+            SqlCommand command = new SqlCommand(query, dbYhteys);
+            SqlDataReader reader = command.ExecuteReader();
+            List<AutonMallit> mallit = new List<AutonMallit>();
+            while (reader.Read())
+            {
+                AutonMallit malli = new AutonMallit();
+                malli.ID = reader.GetInt32(0);
+                malli.AutonMalli = reader.GetString(1);
+                malli.AutonMerkkiID = reader.GetInt32(2);
+                mallit.Add(malli);
+            }
+            return mallit;
         }
-
     }
 }

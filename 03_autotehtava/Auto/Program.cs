@@ -11,7 +11,7 @@ namespace Autokauppa
     {
         static void Main(string[] args)
         {
-            MainMenu MainWindow = new MainMenu();
+            MainMenu MainWindow = new();
             MainWindow.ShowDialog();
         }
     }

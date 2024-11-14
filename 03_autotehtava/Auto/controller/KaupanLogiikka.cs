@@ -8,32 +8,29 @@ using System.Threading.Tasks;
 
 namespace Autokauppa.controller
 {
-
-    
     public class KaupanLogiikka
     {
-        DatabaseHallinta dbModel = new DatabaseHallinta();
+        DatabaseHallinta dbModel = new();
 
         public bool TestDatabaseConnection()
         {
-            bool doesItWork = dbModel.connectDatabase();
-            return doesItWork;
+            return dbModel.ConnectDatabase();
         }
 
-        public bool saveAuto(model.Auto newAuto) 
+        public bool SaveAuto(model.Auto newAuto) 
         {
-            bool didItGoIntoDatabase = dbModel.saveAutoIntoDatabase(newAuto);
+            bool didItGoIntoDatabase = dbModel.SaveAutoIntoDatabase(newAuto);
             return didItGoIntoDatabase;
         }
 
-        public List<object> getAllAutoMakers() {
-
-            return dbModel.getAllAutoMakersFromDatabase();
+        public Auto GetAutoFromDatabase(int id)
+        {
+            return dbModel.GetAutoFromDatabase(id);
         }
 
-        public List<object> getAutoModels(int makerId) {
-
-            return dbModel.getAutoModelsByMakerId(makerId);
+        internal List<AutonMallit> GetAutonMallit()
+        {
+            return dbModel.GetAutonMallit();
         }
     }
 }
