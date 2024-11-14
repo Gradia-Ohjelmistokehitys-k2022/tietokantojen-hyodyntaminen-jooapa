@@ -32,5 +32,10 @@ namespace Autokauppa.controller
         {
             return dbModel.GetAutonMallit();
         }
+
+        internal string GetAutonMalliNimi(int autonMalliID)
+        {
+            return dbModel.GetAutonMalli(autonMalliID);
+        }
     }
 }

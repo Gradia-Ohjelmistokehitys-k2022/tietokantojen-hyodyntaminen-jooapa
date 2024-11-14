@@ -29,11 +29,24 @@ namespace Autokauppa.view
 
         public void SetAutoToForm(Auto auto)
         {
+            //print to ocnsole 
+            Console.WriteLine(auto.ID);
+            Console.WriteLine(auto.Hinta);
+            Console.WriteLine(auto.Mittarilukema);
+            Console.WriteLine(auto.Moottorin_tilavuus);
+            Console.WriteLine(auto.Rekisteri_paivamaara);
+            Console.WriteLine(auto.AutonMalliID);
+            Console.WriteLine(auto.PolttoaineID);
+            Console.WriteLine(auto.VaritID);
+            Console.WriteLine(auto.AutonMerkkiID);
+
             tbHinta.Text = auto.Hinta.ToString();
             tbId.Text = auto.ID.ToString();
             tbMittari.Text = auto.Mittarilukema.ToString();
             tbMottoriTlv.Text = auto.Moottorin_tilavuus.ToString();
             dtpPaiva.Value = auto.Rekisteri_paivamaara;
+            // Get the auton malli from the database
+            var malli = registerHandler.GetAutonMalliNimi(auto.AutonMalliID);
         }
 
         private void MainMenu_Load(object sender, EventArgs e)
@@ -66,6 +79,26 @@ namespace Autokauppa.view
             cbVari.Items.Clear();
 
             List<AutonMallit> mallit = registerHandler.GetAutonMallit();
+            //List<AutonMerkki> merkit = registerHandler.GetAutonMerkit();
+            //List<Polttoaine> polttoaineet = registerHandler.GetPolttoaineet();
+            //List<Varit> varit = registerHandler.GetVarit();
+
+            foreach (var item in mallit)
+            {
+                cbMalli.Items.Add(item.AutonMalli);
+            }
+            //foreach (var item in merkit)
+            //{
+            //    cbMerkki.Items.Add(item.Merkki);
+            //}
+            //foreach (var item in polttoaineet)
+            //{
+            //    cbPolttoaine.Items.Add(item.PolttoaineNimi);
+            //}
+            //foreach (var item in varit)
+            //{
+            //    cbVari.Items.Add(item.Vari);
+            //}
         }
 
         private void gbAuto_Enter(object sender, EventArgs e)

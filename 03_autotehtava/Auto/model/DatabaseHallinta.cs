@@ -17,13 +17,14 @@ namespace Autokauppa.model
     {
         string yhteysTiedot;
         SqlConnection dbYhteys;
+        SqlDataReader reader;
 
         public DatabaseHallinta()
         {
-           yhteysTiedot =
-            "Server=(localdb)\\MSSQLLocalDB;" +
-            "Database=Autokoulu;" +
-            "Trusted_Connection=True;";
+            yhteysTiedot =
+             "Server=(localdb)\\MSSQLLocalDB;" +
+             "Database=Autokoulu;" +
+             "Trusted_Connection=True;";
         }
 
         public bool ConnectDatabase()
@@ -53,13 +54,14 @@ namespace Autokauppa.model
 
         public Auto GetAutoFromDatabase(int id)
         {
+            ConnectDatabase();
             string query = @"SELECT * FROM auto
                             ORDER BY(SELECT NULL)
                             OFFSET " + id + @" ROWS
                             FETCH NEXT 1 ROWS ONLY;"
             ;
-            SqlCommand command = new SqlCommand(query, dbYhteys);
-            SqlDataReader reader = command.ExecuteReader();
+            SqlCommand command = new(query, dbYhteys);
+            reader = command.ExecuteReader();
             Auto auto = new Auto();
             while (reader.Read())
             {
@@ -73,24 +75,45 @@ namespace Autokauppa.model
                 auto.VaritID = reader.GetInt32(7);
                 auto.PolttoaineID = reader.GetInt32(8);
             }
+            DisconnectDatabase();
             return auto;
         }
 
         internal List<AutonMallit> GetAutonMallit()
         {
+            ConnectDatabase();
             string query = @"SELECT * FROM autonmallit;";
-            SqlCommand command = new SqlCommand(query, dbYhteys);
-            SqlDataReader reader = command.ExecuteReader();
-            List<AutonMallit> mallit = new List<AutonMallit>();
+            SqlCommand command = new(query, dbYhteys);
+            reader = command.ExecuteReader();
+            List<AutonMallit> mallit = new();
             while (reader.Read())
             {
-                AutonMallit malli = new AutonMallit();
-                malli.ID = reader.GetInt32(0);
-                malli.AutonMalli = reader.GetString(1);
-                malli.AutonMerkkiID = reader.GetInt32(2);
+                AutonMallit malli = new()
+                {
+                    ID = reader.GetInt32(0),
+                    AutonMalli = reader.GetString(1),
+                    AutonMerkkiID = reader.GetInt32(2)
+                };
                 mallit.Add(malli);
             }
+            DisconnectDatabase();
             return mallit;
+        }
+
+        internal string GetAutonMalli(int id)
+        {
+            ConnectDatabase();
+            string query = @"SELECT * FROM autonmallit
+                            WHERE ID = " + id + ";";
+            SqlCommand command = new(query, dbYhteys);
+            reader = command.ExecuteReader();
+            string malli = "";
+            while (reader.Read())
+            {
+                malli = reader.GetString(1);
+            }
+            DisconnectDatabase();
+            return malli;
         }
     }
 }
