@@ -16,8 +16,8 @@ namespace Autokauppa.model
     public class DatabaseHallinta
     {
         string yhteysTiedot;
-        SqlConnection dbYhteys;
-        SqlDataReader reader;
+        private SqlConnection dbYhteys;
+        private SqlDataReader reader;
 
         public DatabaseHallinta()
         {
@@ -55,11 +55,14 @@ namespace Autokauppa.model
         public Auto GetAutoFromDatabase(int id)
         {
             ConnectDatabase();
+            //string query = @"SELECT * FROM auto
+            //                ORDER BY(SELECT NULL)
+            //                OFFSET " + id + @" ROWS
+            //                FETCH NEXT 1 ROWS ONLY;"
             string query = @"SELECT * FROM auto
-                            ORDER BY(SELECT NULL)
+                            ORDER BY hinta ASC
                             OFFSET " + id + @" ROWS
-                            FETCH NEXT 1 ROWS ONLY;"
-            ;
+                            FETCH NEXT 1 ROWS ONLY;";
             SqlCommand command = new(query, dbYhteys);
             reader = command.ExecuteReader();
             Auto auto = new Auto();
@@ -79,6 +82,69 @@ namespace Autokauppa.model
             return auto;
         }
 
+        internal string GetAutonMalli(int id)
+        {
+            ConnectDatabase();
+            string query = @"SELECT * FROM autonmallit
+                            WHERE ID = " + id + ";";
+            SqlCommand command = new(query, dbYhteys);
+            reader = command.ExecuteReader();
+            string malli = "";
+            while (reader.Read())
+            {
+                malli = reader.GetString(1);
+            }
+            DisconnectDatabase();
+            return malli;
+        }
+
+        internal string GetAutonMerkki(int id)
+        {
+            ConnectDatabase();
+            string query = @"SELECT * FROM AutonMerkki
+                            WHERE ID = " + id + ";";
+            SqlCommand command = new(query, dbYhteys);
+            reader = command.ExecuteReader();
+            string malli = "";
+            while (reader.Read())
+            {
+                malli = reader.GetString(1);
+            }
+            DisconnectDatabase();
+            return malli;
+        }
+
+        internal string GetPolttoaine(int id)
+        {
+            ConnectDatabase();
+            string query = @"SELECT * FROM Polttoaine
+                            WHERE ID = " + id + ";";
+            SqlCommand command = new(query, dbYhteys);
+            reader = command.ExecuteReader();
+            string malli = "";
+            while (reader.Read())
+            {
+                malli = reader.GetString(1);
+            }
+            DisconnectDatabase();
+            return malli;
+        }
+
+        internal string GetVari(int id)
+        {
+            ConnectDatabase();
+            string query = @"SELECT * FROM Varit
+                            WHERE ID = " + id + ";";
+            SqlCommand command = new(query, dbYhteys);
+            reader = command.ExecuteReader();
+            string malli = "";
+            while (reader.Read())
+            {
+                malli = reader.GetString(1);
+            }
+            DisconnectDatabase();
+            return malli;
+        }
         internal List<AutonMallit> GetAutonMallit()
         {
             ConnectDatabase();
@@ -100,20 +166,79 @@ namespace Autokauppa.model
             return mallit;
         }
 
-        internal string GetAutonMalli(int id)
+        internal List<AutonMerkki> GetAutonMerkit()
         {
             ConnectDatabase();
-            string query = @"SELECT * FROM autonmallit
-                            WHERE ID = " + id + ";";
+            string query = @"SELECT * FROM AutonMerkki;";
             SqlCommand command = new(query, dbYhteys);
             reader = command.ExecuteReader();
-            string malli = "";
+            List<AutonMerkki> merkit = new();
             while (reader.Read())
             {
-                malli = reader.GetString(1);
+                AutonMerkki merkki = new()
+                {
+                    ID = reader.GetInt32(0),
+                    Merkki = reader.GetString(1)
+                };
+                merkit.Add(merkki);
             }
             DisconnectDatabase();
-            return malli;
+            return merkit;
+        }
+
+        internal List<Polttoaine> GetPolttoaineet()
+        {
+
+            ConnectDatabase();
+            string query = @"SELECT * FROM Polttoaine;";
+            SqlCommand command = new(query, dbYhteys);
+            reader = command.ExecuteReader();
+            List<Polttoaine> polttoaineet = new();
+            while (reader.Read())
+            {
+                Polttoaine polttoaine = new()
+                {
+                    ID = reader.GetInt32(0),
+                    PolttoaineNimi = reader.GetString(1)
+                };
+                polttoaineet.Add(polttoaine);
+            }
+            DisconnectDatabase();
+            return polttoaineet;
+        }
+        internal List<Varit> GetVarit()
+        {
+            ConnectDatabase();
+            string query = @"SELECT * FROM Varit;";
+            SqlCommand command = new(query, dbYhteys);
+            reader = command.ExecuteReader();
+            List<Varit> varit = new();
+            while (reader.Read())
+            {
+                Varit vari = new()
+                {
+                    ID = reader.GetInt32(0),
+                    Vari = reader.GetString(1)
+                };
+                varit.Add(vari);
+            }
+            DisconnectDatabase();
+            return varit;
+        }
+
+        internal int GetAutoIDLength()
+        {
+            ConnectDatabase();
+            string query = @"SELECT COUNT(*) FROM auto;";
+            SqlCommand command = new(query, dbYhteys);
+            reader = command.ExecuteReader();
+            int length = 0;
+            while (reader.Read())
+            {
+                length = reader.GetInt32(0);
+            }
+            DisconnectDatabase();
+            return length;
         }
     }
 }

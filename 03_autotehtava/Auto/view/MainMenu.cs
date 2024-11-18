@@ -21,6 +21,8 @@ namespace Autokauppa.view
         //KaupanLogiikka registerHandler;
 
         KaupanLogiikka registerHandler = new();
+        int currentAutoID = 1;
+
         public MainMenu()
         {
             //registerHandler = new KaupanLogiikka();
@@ -46,14 +48,17 @@ namespace Autokauppa.view
             tbMottoriTlv.Text = auto.Moottorin_tilavuus.ToString();
             dtpPaiva.Value = auto.Rekisteri_paivamaara;
             // Get the auton malli from the database
-            var malli = registerHandler.GetAutonMalliNimi(auto.AutonMalliID);
+            cbMalli.Text = registerHandler.GetAutonMalliNimi(auto.AutonMalliID);
+            cbMerkki.Text = registerHandler.GetAutonMerkkiNimi(auto.AutonMerkkiID);
+            cbPolttoaine.Text = registerHandler.GetPolttoaineNimi(auto.PolttoaineID);
+            cbVari.Text = registerHandler.GetVariNimi(auto.VaritID);
         }
 
         private void MainMenu_Load(object sender, EventArgs e)
         {
             if (registerHandler.TestDatabaseConnection())
             {
-                label5.Text = "Yhteys tietokantaan toimii";
+                //label5.Text = "Yhteys tietokantaan toimii";
             }
             else
             {
@@ -65,7 +70,7 @@ namespace Autokauppa.view
             SetCBValues();
 
             // get the first auto from the database
-            Auto auto = registerHandler.GetAutoFromDatabase(1);
+            Auto auto = registerHandler.GetAutoFromDatabase(currentAutoID);
 
             // set the auto to the form
             SetAutoToForm(auto);
@@ -79,26 +84,26 @@ namespace Autokauppa.view
             cbVari.Items.Clear();
 
             List<AutonMallit> mallit = registerHandler.GetAutonMallit();
-            //List<AutonMerkki> merkit = registerHandler.GetAutonMerkit();
-            //List<Polttoaine> polttoaineet = registerHandler.GetPolttoaineet();
-            //List<Varit> varit = registerHandler.GetVarit();
+            List<AutonMerkki> merkit = registerHandler.GetAutonMerkit();
+            List<Polttoaine> polttoaineet = registerHandler.GetPolttoaineet();
+            List<Varit> varit = registerHandler.GetVarit();
 
             foreach (var item in mallit)
             {
                 cbMalli.Items.Add(item.AutonMalli);
             }
-            //foreach (var item in merkit)
-            //{
-            //    cbMerkki.Items.Add(item.Merkki);
-            //}
-            //foreach (var item in polttoaineet)
-            //{
-            //    cbPolttoaine.Items.Add(item.PolttoaineNimi);
-            //}
-            //foreach (var item in varit)
-            //{
-            //    cbVari.Items.Add(item.Vari);
-            //}
+            foreach (var item in merkit)
+            {
+                cbMerkki.Items.Add(item.Merkki);
+            }
+            foreach (var item in polttoaineet)
+            {
+                cbPolttoaine.Items.Add(item.PolttoaineNimi);
+            }
+            foreach (var item in varit)
+            {
+                cbVari.Items.Add(item.Vari);
+            }
         }
 
         private void gbAuto_Enter(object sender, EventArgs e)
@@ -108,11 +113,48 @@ namespace Autokauppa.view
 
         private void btnSeuraava_Click(object sender, EventArgs e)
         {
-
+            SetCBValues();
+            currentAutoID++;
+            Auto auto = registerHandler.GetAutoFromDatabase(currentAutoID);
+            SetAutoToForm(auto);
         }
 
         private void btnEdellinen_Click(object sender, EventArgs e)
         {
+            SetCBValues();
+            currentAutoID--;
+            Auto auto = registerHandler.GetAutoFromDatabase(currentAutoID);
+            SetAutoToForm(auto);
+        }
+
+        private void exitToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void testaaTietokantaaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (registerHandler.TestDatabaseConnection())
+            {
+                MessageBox.Show("Yhteys tietokantaan toimii");
+            }
+            else
+            {
+                MessageBox.Show("Yhteys tietokantaan ei toimi");
+            }
+        }
+
+        private void btnTallenna_Click(object sender, EventArgs e)
+        {
+            int id = currentAutoID;
+            decimal hinta = decimal.Parse(tbHinta.Text);
+            int mittarilukema = int.Parse(tbMittari.Text);
+            decimal moottorin_tilavuus = decimal.Parse(tbMottoriTlv.Text);
+            DateTime rekisteri_paivamaara = dtpPaiva.Value;
+            int autonMalliID = registerHandler.GetAutonMalliID(cbMalli.Text);
+            int autonMerkkiID = registerHandler.GetAutonMerkkiID(cbMerkki.Text);
+            int polttoaineID = registerHandler.GetPolttoaineID(cbPolttoaine.Text);
+            int varitID = registerHandler.GetVariID(cbVari.Text);
 
         }
     }
