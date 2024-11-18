@@ -24,29 +24,26 @@ namespace Autokauppa.controller
             return didItGoIntoDatabase;
         }
 
-        private int GetAutoIDLength()
-        {
-            return dbModel.GetAutoIDLength();
-        }
+
         public Auto GetAutoFromDatabase(int id)
         {
-            int length = GetAutoIDLength() - 1;
+            //int length = dbModel.GetLength() - 1;
 
-            if (id < 1)
-            {
-                //MessageBox.Show("id < 1" + id);
-                return dbModel.GetAutoFromDatabase(length);
-            }
-            else if (id > length)
-            {
-                //MessageBox.Show("id > len" + id);
-                return dbModel.GetAutoFromDatabase(1);
-            }
-            else
-            {
+            //if (id < 1)
+            //{
+            //    //MessageBox.Show("id < 1" + id);
+            //    return dbModel.GetAutoFromDatabase(dbModel.GetAutoHintaLastID());
+            //}
+            //else if (id > length)
+            //{
+            //    //MessageBox.Show("id > len" + id);
+            //    return dbModel.GetAutoFromDatabase(dbModel.GetAutoHintaFirstID());
+            //}
+            //else
+            //{
                 //MessageBox.Show("id gay" + id);
                 return dbModel.GetAutoFromDatabase(id);
-            }
+            //}
         }
 
         internal string GetAutonMalliNimi(int autonMalliID)
@@ -86,6 +83,46 @@ namespace Autokauppa.controller
         internal List<Varit> GetVarit()
         {
             return dbModel.GetVarit();
+        }
+
+        internal int GetAutonMalliIDFromText(string text)
+        {
+            return dbModel.GetAutonMalliIDFromText(text);
+        }
+
+        internal int GetAutonMerkkiIDFromText(string text)
+        {
+            return dbModel.GetAutonMerkkiIDFromText(text);
+        }
+
+        internal int GetPolttoaineIDFromText(string text)
+        {
+            return dbModel.GetPolttoaineIDFromText(text);
+        }
+
+        internal int GetVariIDFromText(string text)
+        {
+            return dbModel.GetVariIDFromText(text);
+        }
+
+        internal void UpdateAuto(Auto auto)
+        {
+            dbModel.UpdateAuto(auto);
+        }
+
+        internal int GetAutoCountID()
+        {
+            return dbModel.GetAutoCountID();
+        }
+
+        internal void DeleteAuto(int id)
+        {
+            dbModel.DeleteAuto(id);
+        }
+
+        internal void AddNewAuto(Auto auto)
+        {
+            dbModel.AddNewAuto(auto);
         }
     }
 }

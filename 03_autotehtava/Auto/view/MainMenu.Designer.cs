@@ -56,10 +56,8 @@
             btnLisaa = new System.Windows.Forms.Button();
             btnTallenna = new System.Windows.Forms.Button();
             btnPoista = new System.Windows.Forms.Button();
-            dataGridView1 = new System.Windows.Forms.DataGridView();
             gbAuto.SuspendLayout();
             menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // btnSeuraava
@@ -269,7 +267,7 @@
             menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { exitToolStripMenuItem, aboutToolStripMenuItem });
             menuStrip1.Location = new System.Drawing.Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new System.Drawing.Size(901, 28);
+            menuStrip1.Size = new System.Drawing.Size(509, 28);
             menuStrip1.TabIndex = 20;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -310,6 +308,7 @@
             btnLisaa.TabIndex = 21;
             btnLisaa.Text = "Lisää";
             btnLisaa.UseVisualStyleBackColor = true;
+            btnLisaa.Click += btnLisaa_Click;
             // 
             // btnTallenna
             // 
@@ -331,26 +330,13 @@
             btnPoista.TabIndex = 24;
             btnPoista.Text = "Poista";
             btnPoista.UseVisualStyleBackColor = true;
-            // 
-            // dataGridView1
-            // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new System.Drawing.Point(475, 56);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.RowTemplate.Height = 29;
-            dataGridView1.Size = new System.Drawing.Size(414, 239);
-            dataGridView1.TabIndex = 25;
+            btnPoista.Click += btnPoista_Click;
             // 
             // MainMenu
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(901, 470);
-            Controls.Add(dataGridView1);
+            ClientSize = new System.Drawing.Size(509, 470);
             Controls.Add(btnPoista);
             Controls.Add(btnTallenna);
             Controls.Add(btnLisaa);
@@ -367,7 +353,6 @@
             gbAuto.PerformLayout();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -401,6 +386,5 @@
         private System.Windows.Forms.Label pricaLabel;
         private System.Windows.Forms.Button btnTallenna;
         private System.Windows.Forms.Button btnPoista;
-        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }

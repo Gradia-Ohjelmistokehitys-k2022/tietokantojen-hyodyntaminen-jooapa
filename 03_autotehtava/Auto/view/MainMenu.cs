@@ -113,18 +113,32 @@ namespace Autokauppa.view
 
         private void btnSeuraava_Click(object sender, EventArgs e)
         {
+            btnEdellinen.Enabled = false;
+            btnSeuraava.Enabled = false;
             SetCBValues();
             currentAutoID++;
+            if (currentAutoID == registerHandler.GetAutoCountID())
+                currentAutoID = 1;
+
             Auto auto = registerHandler.GetAutoFromDatabase(currentAutoID);
             SetAutoToForm(auto);
+            btnEdellinen.Enabled = true;
+            btnSeuraava.Enabled = true;
         }
 
         private void btnEdellinen_Click(object sender, EventArgs e)
         {
+            btnEdellinen.Enabled = false;
+            btnSeuraava.Enabled = false;
             SetCBValues();
             currentAutoID--;
+            if (currentAutoID == 0)
+                currentAutoID = registerHandler.GetAutoCountID() - 1;
+
             Auto auto = registerHandler.GetAutoFromDatabase(currentAutoID);
             SetAutoToForm(auto);
+            btnEdellinen.Enabled = true;
+            btnSeuraava.Enabled = true;
         }
 
         private void exitToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -146,16 +160,74 @@ namespace Autokauppa.view
 
         private void btnTallenna_Click(object sender, EventArgs e)
         {
-            int id = currentAutoID;
-            decimal hinta = decimal.Parse(tbHinta.Text);
+            int id = int.Parse(tbId.Text);
+            Decimal hinta = decimal.Parse(tbHinta.Text);
             int mittarilukema = int.Parse(tbMittari.Text);
-            decimal moottorin_tilavuus = decimal.Parse(tbMottoriTlv.Text);
+            Decimal moottorin_tilavuus = decimal.Parse(tbMottoriTlv.Text);
             DateTime rekisteri_paivamaara = dtpPaiva.Value;
-            int autonMalliID = registerHandler.GetAutonMalliID(cbMalli.Text);
-            int autonMerkkiID = registerHandler.GetAutonMerkkiID(cbMerkki.Text);
-            int polttoaineID = registerHandler.GetPolttoaineID(cbPolttoaine.Text);
-            int varitID = registerHandler.GetVariID(cbVari.Text);
+            int autonMalliID = registerHandler.GetAutonMalliIDFromText(cbMalli.Text);
+            int autonMerkkiID = registerHandler.GetAutonMerkkiIDFromText(cbMerkki.Text);
+            int polttoaineID = registerHandler.GetPolttoaineIDFromText(cbPolttoaine.Text);
+            int varitID = registerHandler.GetVariIDFromText(cbVari.Text);
+
+            Auto auto = new()
+            {
+                ID = id,
+                Hinta = hinta,
+                Mittarilukema = mittarilukema,
+                Moottorin_tilavuus = moottorin_tilavuus,
+                Rekisteri_paivamaara = rekisteri_paivamaara,
+                AutonMalliID = autonMalliID,
+                AutonMerkkiID = autonMerkkiID,
+                PolttoaineID = polttoaineID,
+                VaritID = varitID
+            };
+
+            registerHandler.UpdateAuto(auto);
+        }
+
+        private void btnPoista_Click(object sender, EventArgs e)
+        {
+            int id = int.Parse(tbId.Text);
+
+            registerHandler.DeleteAuto(id);
+
+            Auto auto = registerHandler.GetAutoFromDatabase(currentAutoID);
+            SetAutoToForm(auto);
+        }
+
+        private void btnLisaa_Click(object sender, EventArgs e)
+        {
+            int id = int.Parse(tbId.Text);
+            Decimal hinta = decimal.Parse(tbHinta.Text);
+            int mittarilukema = int.Parse(tbMittari.Text);
+            Decimal moottorin_tilavuus = decimal.Parse(tbMottoriTlv.Text);
+            DateTime rekisteri_paivamaara = dtpPaiva.Value;
+            int autonMalliID = registerHandler.GetAutonMalliIDFromText(cbMalli.Text);
+            int autonMerkkiID = registerHandler.GetAutonMerkkiIDFromText(cbMerkki.Text);
+            int polttoaineID = registerHandler.GetPolttoaineIDFromText(cbPolttoaine.Text);
+            int varitID = registerHandler.GetVariIDFromText(cbVari.Text);
+
+            Auto auto = new()
+            {
+                ID = id,
+                Hinta = hinta,
+                Mittarilukema = mittarilukema,
+                Moottorin_tilavuus = moottorin_tilavuus,
+                Rekisteri_paivamaara = rekisteri_paivamaara,
+                AutonMalliID = autonMalliID,
+                AutonMerkkiID = autonMerkkiID,
+                PolttoaineID = polttoaineID,
+                VaritID = varitID
+            };
+
+            registerHandler.AddNewAuto(auto);
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
         }
+
     }
 }
