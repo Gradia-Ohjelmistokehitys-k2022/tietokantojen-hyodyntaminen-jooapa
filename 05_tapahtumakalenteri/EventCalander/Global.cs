@@ -8,12 +8,20 @@ namespace EventCalander
 	{
 		[Key]
 		public int Id { get; set; }
-		public string Title { get; set; }
-		public string Description { get; set; }
+        [Required(ErrorMessage = "Title is required")]
+        [StringLength(100, ErrorMessage = "Title cannot exceed 100 characters")]
+        public string Title { get; set; }
+        [Required(ErrorMessage = "Description is required")]
+        public string Description { get; set; }
+		[Required(ErrorMessage = "Start Date is required")]
 		public DateTime? StartDate { get; set; }
-		public DateTime? EndDate { get; set; }
-		public string Location { get; set; }
-		public int CategoryId { get; set; }
+        [Required(ErrorMessage = "End Date is required")]
+        public DateTime? EndDate { get; set; }
+        [Required(ErrorMessage = "Location is required")]
+        public string Location { get; set; }
+        [Required(ErrorMessage = "Category is required")]
+        [DeniedValues(0, ErrorMessage = "Please select a valid category.")]
+        public int CategoryId { get; set; }
 		public int CreatedBy { get; set; }
 	}
 

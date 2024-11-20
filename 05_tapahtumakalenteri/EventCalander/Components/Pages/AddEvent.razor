@@ -2,41 +2,51 @@
 @using System.Text.Json
 @rendermode InteractiveServer
 @inject Api Api
+@inject NavigationManager nav
 
-<form method="post" @onsubmit="Submit" @formname="add-event">
+<EditForm Model="Model" OnValidSubmit="Submit">
     <AntiforgeryToken />
+     <DataAnnotationsValidator />
+
     <div>
         <label>
             Title:
             <InputText @bind-Value="Model!.Title" />
+            <ValidationMessage For="@(() => Model!.Title)" />
         </label>
         <label>
-            Description:
+            Description
             <InputText @bind-Value="Model!.Description" />
+            <ValidationMessage For="@(() => Model!.Description)" />
         </label>
         <label>
             StartDate:
             <InputDate @bind-Value="Model!.StartDate" />
+            <ValidationMessage For="@(() => Model!.StartDate)" />
         </label>
         <label>
             EndDate:
             <InputDate @bind-Value="Model!.EndDate" />
+            <ValidationMessage For="@(() => Model!.EndDate)" />
         </label>
         <label>
             Location:
             <InputText @bind-Value="Model!.Location" />
+            <ValidationMessage For="@(() => Model!.Location)" />
         </label>
         <label>
             Category:
             <select @bind="Model!.CategoryId">
+                <option value="">-- Select Category --</option>
                 @if (categories != null)
                 {
                     @foreach (var category in categories)
                     {
-                        <option value="@category.Id">@category.Name</option>
+                        <option value="@category.Id">@category.Name | @category.Id</option>
                     }
                 }
             </select>
+            <ValidationMessage For="@(() => Model!.CategoryId)" />
         </label>
         <label>
             Temp User:
@@ -52,7 +62,7 @@
             @work
         </h1>
     }
-</form>
+</EditForm>
 
 @code {
     [SupplyParameterFromForm]
@@ -64,6 +74,7 @@
     protected override async Task OnInitializedAsync()
     {
         Model ??= new();
+        Model.CreatedBy = 1;
         categories = (await Api.GetCategories()).ToList();
         // users = (await Api.GetUsers()).ToList();
     }
@@ -75,6 +86,13 @@
             work = "Adding event";
             await Api.AddEvent(Model);
             work = JsonSerializer.Serialize(Model, new JsonSerializerOptions { WriteIndented = true });
+            nav.NavigateTo("/event-manager");
+            // work = Model.CategoryId.ToString();
         }
+    }
+
+    private void HandleInvalidSubmit()
+    {
+        work = "There are validation errors.";
     }
 }

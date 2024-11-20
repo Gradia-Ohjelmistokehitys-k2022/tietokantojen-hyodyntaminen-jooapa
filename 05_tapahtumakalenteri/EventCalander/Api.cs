@@ -32,6 +32,7 @@
 //}
 
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace EventCalander
 {
@@ -55,7 +56,12 @@ namespace EventCalander
 
         public async Task<IEnumerable<Category>> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            var cat = await _context.Categories.ToListAsync();
+            //foreach (var c in cat)
+            //{
+            //    Debug.WriteLine(c.Name + c.Id);
+            //}
+            return cat;
         }
 
         public async Task<IEnumerable<User>> GetUsers()
