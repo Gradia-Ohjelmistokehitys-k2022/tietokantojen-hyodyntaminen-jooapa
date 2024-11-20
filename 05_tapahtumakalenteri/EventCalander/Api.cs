@@ -68,6 +68,11 @@ namespace EventCalander
         {
             return await _context.Users.ToListAsync();
         }
+
+        public async Task<IEnumerable<Event>> GetEvents()
+        {
+            return await _context.Events.ToListAsync();
+        }
     }
 }
 

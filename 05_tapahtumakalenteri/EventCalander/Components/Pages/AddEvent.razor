@@ -3,6 +3,7 @@
 @rendermode InteractiveServer
 @inject Api Api
 @inject NavigationManager nav
+<PageTitle>Add Event</PageTitle>
 
 <EditForm Model="Model" OnValidSubmit="Submit">
     <AntiforgeryToken />
@@ -85,14 +86,9 @@
         {
             work = "Adding event";
             await Api.AddEvent(Model);
-            work = JsonSerializer.Serialize(Model, new JsonSerializerOptions { WriteIndented = true });
+            // work = JsonSerializer.Serialize(Model, new JsonSerializerOptions { WriteIndented = true });
             nav.NavigateTo("/event-manager");
             // work = Model.CategoryId.ToString();
         }
-    }
-
-    private void HandleInvalidSubmit()
-    {
-        work = "There are validation errors.";
     }
 }

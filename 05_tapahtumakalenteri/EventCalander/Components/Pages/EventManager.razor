@@ -1,5 +1,70 @@
-﻿<h3>EventManager</h3>
+﻿@page "/event-manager"
+@using EventCalander
+@inject Api Api
+<PageTitle>Event Manager</PageTitle>
+
+<h3>Event Manager</h3>
+
+@if (events == null || categories == null)
+{
+    <p>Loading...</p>
+}
+else if (!events.Any())
+{
+    <p>No events found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Location</th>
+                <th>Category</th>
+                <th>Created By</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var eventItem in events)
+            {
+                <tr>
+                    <td>@eventItem.Title</td>
+                    <td>@eventItem.Description</td>
+                    <td>@eventItem.StartDate</td>
+                    <td>@eventItem.EndDate</td>
+                    <td>@eventItem.Location</td>
+                    <td>@GetCategoryName(eventItem.CategoryId)</td>
+                    <td>@GetUserName(eventItem.CreatedBy)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
+    private List<Event>? events;
+    private List<Category>? categories;
+    private List<User>? users;
 
+    protected override async Task OnInitializedAsync()
+    {
+        events = (await Api.GetEvents()).ToList();
+        categories = (await Api.GetCategories()).ToList();
+        users = (await Api.GetUsers()).ToList();
+    }
+
+    private string GetCategoryName(int categoryId)
+    {
+        var category = categories?.FirstOrDefault(c => c.Id == categoryId);
+        return category?.Name ?? "Unknown";
+    }
+        
+    private string GetUserName(int userId)
+	{
+		var user = users?.FirstOrDefault(u => u.Id == userId);
+        return user?.FirstName + " " + user?.LastName ?? "Unknown";
+	}
 }
