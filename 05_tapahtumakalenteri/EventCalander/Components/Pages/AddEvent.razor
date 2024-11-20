@@ -1,0 +1,80 @@
+﻿@page "/add-event"
+@using System.Text.Json
+@rendermode InteractiveServer
+@inject Api Api
+
+<form method="post" @onsubmit="Submit" @formname="add-event">
+    <AntiforgeryToken />
+    <div>
+        <label>
+            Title:
+            <InputText @bind-Value="Model!.Title" />
+        </label>
+        <label>
+            Description:
+            <InputText @bind-Value="Model!.Description" />
+        </label>
+        <label>
+            StartDate:
+            <InputDate @bind-Value="Model!.StartDate" />
+        </label>
+        <label>
+            EndDate:
+            <InputDate @bind-Value="Model!.EndDate" />
+        </label>
+        <label>
+            Location:
+            <InputText @bind-Value="Model!.Location" />
+        </label>
+        <label>
+            Category:
+            <select @bind="Model!.CategoryId">
+                @if (categories != null)
+                {
+                    @foreach (var category in categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                }
+            </select>
+        </label>
+        <label>
+            Temp User:
+            <InputNumber @bind-Value="Model!.CreatedBy" />
+        </label>
+    </div>
+    <div>
+        <button type="submit">Submit</button>
+    </div>
+    @if (work != null)
+    {
+        <h1>
+            @work
+        </h1>
+    }
+</form>
+
+@code {
+    [SupplyParameterFromForm]
+    private Event? Model { get; set; }
+    private string? work = null;
+    private List<Category>? categories;
+    private List<User>? users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model ??= new();
+        categories = (await Api.GetCategories()).ToList();
+        // users = (await Api.GetUsers()).ToList();
+    }
+
+    private async Task Submit()
+    {
+        if (Model != null)
+        {
+            work = "Adding event";
+            await Api.AddEvent(Model);
+            work = JsonSerializer.Serialize(Model, new JsonSerializerOptions { WriteIndented = true });
+        }
+    }
+}
