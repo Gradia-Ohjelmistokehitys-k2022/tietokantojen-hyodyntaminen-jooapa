@@ -7,8 +7,7 @@
 
 <EditForm Model="Model" OnValidSubmit="Submit">
     <AntiforgeryToken />
-     <DataAnnotationsValidator />
-
+    <DataAnnotationsValidator />
     <div>
         <label>
             Title:
@@ -43,7 +42,7 @@
                 {
                     @foreach (var category in categories)
                     {
-                        <option value="@category.Id">@category.Name | @category.Id</option>
+                        <option value="@category.Id">@category.Name</option>
                     }
                 }
             </select>
@@ -57,12 +56,6 @@
     <div>
         <button type="submit">Submit</button>
     </div>
-    @if (work != null)
-    {
-        <h1>
-            @work
-        </h1>
-    }
 </EditForm>
 
 @code {
@@ -71,9 +64,17 @@
     private string? work = null;
     private List<Category>? categories;
     private List<User>? users;
+    private bool loading = true;
+
+    protected override void OnInitialized()
+    {
+        work = null;
+    }
+
 
     protected override async Task OnInitializedAsync()
     {
+
         Model ??= new();
         Model.CreatedBy = 1;
         categories = (await Api.GetCategories()).ToList();

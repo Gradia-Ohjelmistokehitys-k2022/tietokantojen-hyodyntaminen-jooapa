@@ -54,6 +54,15 @@ namespace EventCalander
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateEvent(Event @event)
+        {
+            // Update the event in the database context
+            _context.Events.Update(@event);
+
+            // Save the changes to the database
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Category>> GetCategories()
         {
             var cat = await _context.Categories.ToListAsync();
