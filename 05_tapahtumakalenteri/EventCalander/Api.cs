@@ -1,5 +1,5 @@
 ﻿//using Microsoft.Data.SqlClient;
-
+using Konscious.Security.Cryptography;
 //namespace EventCalander
 //{
 //    public class Api
@@ -82,6 +82,73 @@ namespace EventCalander
         {
             return await _context.Events.ToListAsync();
         }
-    }
+
+		/// <summary>
+        /// has password
+        /// </summary>
+        public string HashPassword(string password)
+		{
+			// Hash the password
+			Argon2id argon2 = new(System.Text.Encoding.UTF8.GetBytes(password))
+			{
+				Salt = System.Text.Encoding.UTF8.GetBytes("salt"),
+				MemorySize = 65536,
+				DegreeOfParallelism = 4,
+				Iterations = 4
+			};
+			byte[] hash = argon2.GetBytes(16);
+
+			// Convert the hash to a string
+			return Convert.ToBase64String(hash);
+		}
+
+		/// <summary>
+		/// login
+		/// </summary
+		public string Login(User user)
+		{
+			// Hash the password
+			string passwordHash = HashPassword(user.PasswordHash);
+
+			// Find the user in the database
+			User? dbUser = _context.Users.FirstOrDefault(u => u.Email == user.Email);
+
+			// Check if the user exists
+			if (dbUser == null)
+			{
+				return "User not found";
+			}
+
+			// Check if the password is correct
+			if (dbUser.PasswordHash != passwordHash)
+			{
+				return "Incorrect password";
+			}
+
+			return "Login successful";
+		}
+		/// <summary>
+		/// sign up
+		/// </summary
+		public async Task SignUp(User user)
+        {
+            user.PasswordHash = HashPassword(user.PasswordHash);
+
+			// if admin
+			if(user.FirstName == "admin")
+			{
+				user.Role = "admin";
+			}
+			else
+			{
+				user.Role = "user";
+			}
+
+			_context.Users.Add(user);
+
+			await _context.SaveChangesAsync();
+
+		}
+	}
 }
 

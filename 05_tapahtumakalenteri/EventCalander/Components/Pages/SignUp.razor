@@ -1,0 +1,56 @@
+﻿@page "/signup"
+@using System.Text.Json
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Authorization
+@rendermode InteractiveServer
+@inject Api Api
+@inject NavigationManager nav
+<PageTitle>Sign Up</PageTitle>
+
+<EditForm Model="User" OnValidSubmit="Submit">
+	<AntiforgeryToken />
+	<DataAnnotationsValidator />
+	<div>
+		<label>
+			First Name:
+			<InputText @bind-Value="User.FirstName" />
+			<ValidationMessage For="@(() => User.FirstName)" />
+		</label>
+	</div>
+	<div>
+		<label>
+			Last Name:
+			<InputText @bind-Value="User.LastName" />
+			<ValidationMessage For="@(() => User.LastName)" />
+		</label>
+	</div>
+	<div>
+		<label>
+			Email:
+			<InputText @bind-Value="User.Email" />
+			<ValidationMessage For="@(() => User.Email)" />
+		</label>
+	</div>
+	<div>
+		<label>
+			Password:
+			<InputText @bind-Value="User.PasswordHash" type="password" />
+			<ValidationMessage For="@(() => User.PasswordHash)" />
+		</label>
+	</div>
+	<div>
+		<button type="submit">Submit</button>
+	</div>
+</EditForm>
+
+@code {
+	User User = new User();
+
+	private async Task Submit()
+	{
+		await Api.SignUp(User);
+		nav.NavigateTo("login");
+	}
+}
