@@ -1,43 +1,39 @@
 ﻿@page "/signup"
-@using System.Text.Json
-@using Microsoft.AspNetCore.Components.Forms
-@using Microsoft.AspNetCore.Components
-@using Microsoft.AspNetCore.Components.Web
-@using Microsoft.AspNetCore.Components.Authorization
 @rendermode InteractiveServer
 @inject Api Api
 @inject NavigationManager nav
 <PageTitle>Sign Up</PageTitle>
 
-<EditForm Model="User" OnValidSubmit="Submit">
+@work
+<EditForm Model="@UserForm" OnValidSubmit="@Submit">
 	<AntiforgeryToken />
 	<DataAnnotationsValidator />
 	<div>
 		<label>
 			First Name:
-			<InputText @bind-Value="User.FirstName" />
-			<ValidationMessage For="@(() => User.FirstName)" />
+			<InputText @bind-Value="UserForm.FirstName" />
+			<ValidationMessage For="@(() => UserForm.FirstName)" />
 		</label>
 	</div>
 	<div>
 		<label>
 			Last Name:
-			<InputText @bind-Value="User.LastName" />
-			<ValidationMessage For="@(() => User.LastName)" />
+			<InputText @bind-Value="UserForm.LastName" />
+			<ValidationMessage For="@(() => UserForm.LastName)" />
 		</label>
 	</div>
 	<div>
 		<label>
 			Email:
-			<InputText @bind-Value="User.Email" />
-			<ValidationMessage For="@(() => User.Email)" />
+			<InputText @bind-Value="UserForm.Email" />
+			<ValidationMessage For="@(() => UserForm.Email)" />
 		</label>
 	</div>
 	<div>
 		<label>
 			Password:
-			<InputText @bind-Value="User.PasswordHash" type="password" />
-			<ValidationMessage For="@(() => User.PasswordHash)" />
+			<InputText @bind-Value="UserForm.PasswordHash" type="password" />
+			<ValidationMessage For="@(() => UserForm.PasswordHash)" />
 		</label>
 	</div>
 	<div>
@@ -46,11 +42,16 @@
 </EditForm>
 
 @code {
-	User User = new User();
+	User UserForm = new User();
+	public string work = "";
+	protected override void OnInitialized()
+	{
+		work = "asdasddsa";
+	}
 
 	private async Task Submit()
 	{
-		await Api.SignUp(User);
+		await Api.SignUp(UserForm);
 		nav.NavigateTo("login");
 	}
 }
