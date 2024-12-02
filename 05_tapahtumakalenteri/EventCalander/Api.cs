@@ -105,13 +105,13 @@ namespace EventCalander
 		/// <summary>
 		/// login
 		/// </summary
-		public string Login(User user)
+		public async Task<string> Login(string email, string pass)
 		{
 			// Hash the password
-			string passwordHash = HashPassword(user.PasswordHash);
+			string passwordHash = HashPassword(pass);
 
 			// Find the user in the database
-			User? dbUser = _context.Users.FirstOrDefault(u => u.Email == user.Email);
+			User? dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
 			// Check if the user exists
 			if (dbUser == null)
@@ -127,6 +127,7 @@ namespace EventCalander
 
 			return "Login successful";
 		}
+
 		/// <summary>
 		/// sign up
 		/// </summary
